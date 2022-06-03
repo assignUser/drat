@@ -1,0 +1,8 @@
+Package: octolog
+Version: 0.1.1.9000
+Imports: cli (>= 3.0.0), fs, glue, magrittr, rlang (>= 0.4.10), utils,
+        withr
+Suggests: knitr, covr, mockery (>= 0.4.2.9000), openssl, testthat (>=
+        3.0.0), rmarkdown
+License: MIT + file LICENSE
+MD5sum: 15746d784028ae1c062c3867df124082
