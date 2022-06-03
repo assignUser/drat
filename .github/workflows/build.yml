@@ -68,6 +68,8 @@ jobs:
           cd rpkg-repo
           git config --local user.name "$GITHUB_ACTOR"
           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: insert pkg
         if: success()
         shell: Rscript {0}
