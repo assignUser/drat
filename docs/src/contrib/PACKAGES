@@ -14,7 +14,7 @@ Imports: cli (>= 3.0.0), fs, glue, magrittr, rlang (>= 0.4.10), utils,
 Suggests: knitr, covr, mockery (>= 0.4.2.9000), openssl, testthat (>=
         3.0.0), rmarkdown
 License: MIT + file LICENSE
-MD5sum: 4fecefe09f089d581ce1ab3665d86ffd
+MD5sum: 99b8f9291eedf2caeb2b866c80eacda7
 NeedsCompilation: no
 
 Package: octolog
