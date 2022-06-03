@@ -63,7 +63,11 @@ jobs:
         run: |
           dir.create("pkg-build", showWarnings = FALSE)
           devtools::build(pkg = "${{ github.event.inputs.pkg-path }}", path = "pkg-build", binary = TRUE)
-
+      - name: Set Git User
+        run: |
+          cd rpkg-repo
+          git config --g user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: insert pkg
         if: success()
         shell: Rscript {0}
