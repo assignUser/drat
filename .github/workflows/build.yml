@@ -1,0 +1,83 @@
+name: Update packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: 'Repository with R package to build'
+        required: true
+      ref:
+        description: 'Ref to check out (sha or branch)'
+        default: ''
+        required: false
+      pkg-path:
+        description: 'path to package root in repo'
+        default: 'pkg'
+        required: false
+
+jobs:
+  build:
+    runs-on: ${{ matrix.config.os}}
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { os: ubuntu-18.04, r: '4.1', src: true }
+          - { os: ubuntu-18.04, r: '4.2', src: false }
+          - { os: windows-latest, r: '4.1', src: false }
+          - { os: windows-latest, r: '4.2', src: false }
+          - { os: macos-latest, r: '4.1', src: false }
+          - { os: macos-latest, r: '4.2', src: false }
+    steps:
+      # checkout drat repo
+      - uses: actions/checkout@v3
+        with:
+          path: rpkg-repo
+      # checkout pkg to build
+      - uses: actions/checkout@v3
+        with:
+          path: pkg
+          repository: ${{ github.event.inputs.repo }}
+          ref: ${{ github.event.inputs.ref }}
+      - uses: r-lib/actions/setup-r@9ea29bb8182371e811c469f947bc64ac054b557f
+        with:
+          r-version: ${{ matrix.config.r}}
+      - uses: r-lib/actions/setup-pandoc@9ea29bb8182371e811c469f947bc64ac054b557f
+      - uses: r-lib/actions/setup-r-dependencies@9ea29bb8182371e811c469f947bc64ac054b557f
+        with:
+          working-directory: pkg
+          extra-packages: |
+            github::eddelbuettel/drat
+            github::r-lib/devtools
+            
+      - name: Create source pkg
+        if: matrix.config.src
+        shell: Rscript {0}
+        run: |
+          dir.create("pkg-build", showWarnings = FALSE)
+          devtools::build(pkg =  "${{ github.event.inputs.pkg-path }}", path = "pkg-build")
+
+      - name: Create binary pkg
+        shell: Rscript {0}
+        run: |
+          dir.create("pkg-build", showWarnings = FALSE)
+          devtools::build(pkg = "${{ github.event.inputs.pkg-path }}", path = "pkg-build", binary = TRUE)
+
+      - name: insert pkg
+        if: success()
+        shell: Rscript {0}
+        run: |
+          built_pkg <- list.files(
+            path = "pkg-build",
+            # pattern = "\\.tar\\.gz",
+            full.names = TRUE
+          )
+
+          drat::insertPackage(
+            file    = built_pkg,
+            repodir = "rpkg-repo/docs",
+            pullfirst = TRUE,
+            commit = TRUE
+            action  = "none"
+          )
