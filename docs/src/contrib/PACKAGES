@@ -6,3 +6,23 @@ Suggests: git2r, knitr, rmarkdown
 License: GPL (>= 2)
 MD5sum: 2e7107c8bc567c3e7d1aedbd7aaeb396
 NeedsCompilation: no
+
+Package: octolog
+Version: 0.1.1.9000
+Imports: cli (>= 3.0.0), fs, glue, magrittr, rlang (>= 0.4.10), utils,
+        withr
+Suggests: knitr, covr, mockery (>= 0.4.2.9000), openssl, testthat (>=
+        3.0.0), rmarkdown
+License: MIT + file LICENSE
+MD5sum: 4fecefe09f089d581ce1ab3665d86ffd
+NeedsCompilation: no
+
+Package: octolog
+Version: 0.1.1.9000
+Imports: cli (>= 3.0.0), fs, glue, magrittr, rlang (>= 0.4.10), utils,
+        withr
+Suggests: knitr, covr, mockery (>= 0.4.2.9000), openssl, testthat (>=
+        3.0.0), rmarkdown
+License: MIT + file LICENSE
+MD5sum: 071a406f49bedc491cffa799b7d6cf1d
+NeedsCompilation: no
