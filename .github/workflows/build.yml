@@ -68,10 +68,10 @@ jobs:
           cd rpkg-repo
           git config --local user.name "$GITHUB_ACTOR"
           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+          git pull
+#       - name: Setup tmate session
+#         uses: mxschmitt/action-tmate@v3
       - name: insert pkg
-        if: success()
         shell: Rscript {0}
         run: |
           built_pkg <- list.files(
@@ -83,7 +83,14 @@ jobs:
           drat::insertPackage(
             file    = built_pkg,
             repodir = "rpkg-repo/docs",
-            pullfirst = TRUE,
-            commit = TRUE,
+            pullfirst = FALSE,
+            commit = FALSE,
             action  = "none"
           )
+      - name: commit and push
+        run: |
+          cd  rpkg-repo
+          git add *
+          git add -f *.tar.gz
+          git commit -m "Update package from ${REPO}"
+          git push origin
