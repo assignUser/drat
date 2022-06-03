@@ -78,6 +78,6 @@ jobs:
             file    = built_pkg,
             repodir = "rpkg-repo/docs",
             pullfirst = TRUE,
-            commit = TRUE
+            commit = TRUE,
             action  = "none"
           )
